@@ -18,4 +18,4 @@ num2 = int ( input ( " digite otro numero ") );
 divison = ( num1 / num2 );
 print ( " la division es ; " , divison );
 
-print ("esto es lo que se guarda")
+print ("ejemplo de subida ")
