@@ -1,0 +1,50 @@
+body {
+    background-color:rgb(207, 255, 197);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: color-mix(in srgb, color percentage, color percentage);
+}
+h1 {
+    color:red;
+    font-size: medium;
+}
+ header {
+    padding: 5rem 3rem;
+    border-bottom: 5px rgb(255, 251, 251);
+ }
+ nav a {
+    color: rgb(255, 0, 0);
+ }
+ main {
+    padding: 5rem 5rem;
+    max-width: 800px;
+    margin: 0 auto;
+ }
+ .metodo-titulo { 
+    font-size: 1.1rem;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-bottom: 0.25;
+    color: black;
+ }
+ 
+ .precio {
+    font-weight: bold;
+    color: crimson;
+ }
+  #contador-pedidos {
+   font-size: 1.5rem;
+   font-weight: bold;
+   color: rgb(0, 0, 0);
+  }
+
+  #boton-pedido {
+   display: block;
+   margin-top: 1rem;
+   padding: 0.5rem 1.25rem;
+   background-color: rgb(0, 0, 0);
+   color: rgb(255, 255, 255);
+   border: none;
+   font-family: Georgia, 'Times New Roman', Times, serif;
+   font-size: 1rem;
+   cursor: pointer;
+  }

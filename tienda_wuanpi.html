@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Wuanpi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        wuanpi: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#7c3aed',
+                            600: '#6d28d9',
+                            700: '#5b21b6',
+                            orange: '#ff5a1f',
+                            orangeHover: '#e04a15',
+                            dark: '#090d16',
+                            lightDark: '#111827',
+                            neonGreen: '#10b981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c3aed;
+        }
+        
+        /* Pulse Animation for Live Dot */
+        .live-dot {
+            animation: pulse-green 1.8s infinite;
+        }
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#090d16] text-slate-100 antialiased min-h-screen flex flex-col font-sans">
+
+    <script>
+        // Highly viral dropshipping catalog mapped to Colombian Pesos (COP)
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: "Reloj Inteligente 'Tactical Pro V2' Militar",
+                category: "tecnologia",
+                price: 159900,
+                originalPrice: 319900,
+                rating: 4.9,
+                reviews: 148,
+                image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=600",
+                badge: "Más Vendido 🔥",
+                desc: "Reloj con certificación militar ultra-resistente. Resistente al agua, monitor de ritmo cardíaco, llamadas bluetooth y batería de hasta 15 días.",
+                colors: ["#1f2937", "#14532d"],
+                sizes: ["Único"],
+                stock: 7
+            },
+            {
+                id: 2,
+                name: "Gafas de Sol 'Cyberpunk Maverick'",
+                category: "streetwear",
+                price: 99900,
+                originalPrice: 199900,
+                rating: 4.8,
+                reviews: 89,
+                image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=600",
+                badge: "Viral TikTok 🚀",
+                desc: "Gafas de sol polarizadas futuristas de alta definición. Bloqueo de luz azul, marco de aleación ultra ligero y estilo inigualable.",
+                colors: ["#000000", "#7c3aed", "#ff5a1f"],
+                sizes: ["Estándar"],
+                stock: 4
+            },
+            {
+                id: 3,
+                name: "Mini Proyector Portátil 'Wuanpi Beam' Full HD",
+                category: "tecnologia",
+                price: 359900,
+                originalPrice: 719900,
+                rating: 4.7,
+                reviews: 213,
+                image: "https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&q=80&w=600",
+                badge: "Envío Gratis 🚚",
+                desc: "Transforma tu habitación en un cine de 130 pulgadas. Sistema operativo integrado para Netflix y YouTube, conexión Wi-Fi de alta velocidad.",
+                colors: ["#ffffff", "#111827"],
+                sizes: ["Estándar"],
+                stock: 9
+            },
+            {
+                id: 4,
+                name: "Tenis Deportivos 'Quantum-X Run'",
+                category: "calzado",
+                price: 239900,
+                originalPrice: 479900,
+                rating: 4.9,
+                reviews: 320,
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600",
+                badge: "Descuento 50%",
+                desc: "Tecnología de amortiguación elástica de alta densidad. Suela exterior de caucho antideslizante y tela tejida transpirable premium.",
+                colors: ["#ff5a1f", "#111827", "#3b82f6"],
+                sizes: ["38", "39", "40", "41", "42"],
+                stock: 5
+            },
+            {
+                id: 5,
+                name: "Audífonos Inalámbricos UltraBass 'Wuanpi-Pods'",
+                category: "tecnologia",
+                price: 119900,
+                originalPrice: 239900,
+                rating: 4.6,
+                reviews: 95,
+                image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&q=80&w=600",
+                badge: "Hot Deal ⚡",
+                desc: "Cancelación activa de ruido inteligente con diafragma de 13mm para bajos súper profundos. Estuche de carga rápida tipo C.",
+                colors: ["#111827", "#ffffff"],
+                sizes: ["Único"],
+                stock: 12
+            },
+            {
+                id: 6,
+                name: "Mochila Antirrobo 'Urban Traveler' impermeable",
+                category: "accesorios",
+                price: 139900,
+                originalPrice: 279900,
+                rating: 4.8,
+                reviews: 74,
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600",
+                badge: "Lanzamiento ⚡",
+                desc: "Cremalleras ocultas de alta seguridad, material resistente a cortes y puerto de carga USB externo para tu powerbank.",
+                colors: ["#1f2937", "#374151"],
+                sizes: ["Único"],
+                stock: 3
+            }
+        ];
+
+        // List of mock buyers for live notifications in Colombia
+        const BUYERS = [
+            { name: "Andrés", city: "Cali", item: "Reloj Inteligente Tactical Pro V2", time: "hace 2 minutos" },
+            { name: "Camila", city: "Medellín", item: "Gafas de Sol Cyberpunk Maverick", time: "hace 1 minuto" },
+            { name: "Sebastián", city: "Bogotá", item: "Mini Proyector Portátil Wuanpi Beam", time: "hace 5 minutos" },
+            { name: "Valeria", city: "Barranquilla", item: "Tenis Deportivos Quantum-X Run", time: "hace 3 minutos" },
+            { name: "Santiago", city: "Pereira", item: "Audífonos Inalámbricos UltraBass Wuanpi-Pods", time: "hace 10 segundos" }
+        ];
+    </script>
+
+    <!-- COUNTDOWN PROMO BAR -->
+    <div class="bg-gradient-to-r from-wuanpi-600 via-wuanpi-orange to-wuanpi-700 text-white py-2 px-4 text-xs font-semibold text-center tracking-wider flex flex-col sm:flex-row justify-center items-center gap-2 z-50 relative">
+        <span>⚡ ¡SÚPER OFERTA DE HOY! 50% DE DESCUENTO + ENVÍO GRATIS</span>
+        <div class="flex items-center gap-1 bg-black/30 px-2 py-0.5 rounded font-mono text-[11px] font-bold">
+            <span>⏰ LA OFERTA TERMINA EN: </span>
+            <span id="promo-timer">02:59:59</span>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <nav class="sticky top-0 z-40 bg-wuanpi-dark/90 backdrop-blur-md border-b border-gray-800 shadow-xl transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-wuanpi-600 to-wuanpi-orange flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-wuanpi-500/30">
+                        W
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold bg-gradient-to-r from-white via-slate-100 to-wuanpi-orange bg-clip-text text-transparent">Tienda Wuanpi</span>
+                        <p class="text-[10px] text-wuanpi-orange font-bold tracking-widest uppercase">Dropship Premium</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 text-sm">
+                    <a href="#home" class="text-slate-300 hover:text-wuanpi-orange font-semibold transition-colors">Ofertas Viral</a>
+                    <a href="#catalogo" class="text-slate-300 hover:text-wuanpi-orange font-semibold transition-colors">Productos</a>
+                    <a href="#ventajas" class="text-slate-300 hover:text-wuanpi-orange font-semibold transition-colors">¿Por qué nosotros?</a>
+                    <a href="#garantia" class="text-slate-300 hover:text-wuanpi-orange font-semibold transition-colors">Envíos & Garantía</a>
+                </div>
+
+                <!-- Action Controls (Search & Cart) -->
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden sm:block">
+                        <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar tendencia..." class="w-48 lg:w-64 pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-900 border border-slate-800 text-slate-100 focus:border-wuanpi-orange focus:ring-1 focus:ring-wuanpi-orange outline-none transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    </div>
+
+                    <!-- Cart Button with Counter badge -->
+                    <button onclick="toggleCart(true)" class="relative p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-wuanpi-orange transition-all hover:scale-105" aria-label="Abrir carrito">
+                        <i class="fa-solid fa-fire text-lg"></i>
+                        <span id="cart-counter" class="absolute -top-1 -right-1 w-5 h-5 bg-wuanpi-orange text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-[#090d16] scale-0 transition-transform duration-300">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Toggle Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-wuanpi-orange" aria-label="Menu">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu (Expandable) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-wuanpi-dark border-t border-gray-800 py-4 px-6 space-y-3 shadow-2xl">
+            <div class="relative w-full mb-3">
+                <input type="text" id="mobile-search" oninput="handleSearch(this.value)" placeholder="Buscar tendencia..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl bg-slate-900 border border-slate-800 text-slate-100 focus:border-wuanpi-orange outline-none">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+            </div>
+            <a href="#home" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-wuanpi-orange font-medium py-1">Ofertas Viral</a>
+            <a href="#catalogo" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-wuanpi-orange font-medium py-1">Productos</a>
+            <a href="#ventajas" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-wuanpi-orange font-medium py-1">¿Por qué nosotros?</a>
+            <a href="#garantia" onclick="toggleMobileMenu()" class="block text-slate-300 hover:text-wuanpi-orange font-medium py-1">Envíos & Garantía</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative overflow-hidden pt-12 pb-20 md:py-28 flex items-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-wuanpi-dark to-slate-950">
+        <!-- Abstract Tech Background -->
+        <div class="absolute inset-0 opacity-15 pointer-events-none">
+            <div class="absolute -top-12 -left-12 w-96 h-96 bg-wuanpi-500 rounded-full filter blur-[120px]"></div>
+            <div class="absolute -bottom-12 right-0 w-[500px] h-[500px] bg-wuanpi-orange rounded-full filter blur-[150px]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(#ffffff04_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-wuanpi-orange/15 border border-wuanpi-orange/20 px-3.5 py-1.5 rounded-full text-xs font-bold text-wuanpi-orange uppercase tracking-wider">
+                        <span class="w-2.5 h-2.5 rounded-full bg-wuanpi-neonGreen live-dot"></span> 249 Clientes comprando ahora mismo
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-white">
+                        Los Productos Más <br>
+                        <span class="bg-gradient-to-r from-wuanpi-orange via-purple-500 to-indigo-400 bg-clip-text text-transparent">Virales del Mundo</span> <br>
+                        con Envío Gratis.
+                    </h1>
+                    
+                    <p class="text-slate-400 text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 font-normal">
+                        En <span class="text-white font-semibold">Tienda Wuanpi</span> rastreamos Internet para traerte los gadgets, calzado y moda que son tendencia en redes sociales. ¡Compra hoy y paga al recibir en la puerta de tu casa!
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                        <a href="#catalogo" class="px-8 py-4 bg-gradient-to-r from-wuanpi-orange to-amber-500 hover:from-wuanpi-orangeHover hover:to-amber-600 text-white font-black rounded-xl shadow-lg shadow-wuanpi-orange/20 hover:scale-[1.03] transition-all text-center">
+                            🔥 Ver Productos Virales
+                        </a>
+                        <a href="#garantia" class="px-8 py-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-bold rounded-xl hover:scale-[1.03] transition-all text-center">
+                            📍 Rastrear Envío
+                        </a>
+                    </div>
+
+                    <!-- Dropshipping Trust Badges -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800 max-w-lg mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <i class="fa-solid fa-truck text-wuanpi-orange text-lg mb-1 block"></i>
+                            <p class="text-[11px] text-slate-400 font-bold uppercase">Envío Gratis</p>
+                            <p class="text-xs text-white font-bold">A todo el país</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <i class="fa-solid fa-hand-holding-dollar text-wuanpi-neonGreen text-lg mb-1 block"></i>
+                            <p class="text-[11px] text-slate-400 font-bold uppercase">Contra Entrega</p>
+                            <p class="text-xs text-white font-bold">Paga al recibir</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <i class="fa-solid fa-shield-heart text-purple-500 text-lg mb-1 block"></i>
+                            <p class="text-[11px] text-slate-400 font-bold uppercase">Garantía total</p>
+                            <p class="text-xs text-white font-bold">30 Días de prueba</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Interactive Dropshipping Showcase Product -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-80 h-96 sm:w-96 rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/10 border border-slate-800 group bg-slate-900">
+                        <!-- Floating Scarcity Badge -->
+                        <div class="absolute top-4 right-4 bg-red-600 text-white font-black text-[10px] tracking-wider uppercase px-3 py-1.5 rounded-full z-20 animate-bounce">
+                            ¡Solo quedan 4 unidades!
+                        </div>
+                        
+                        <!-- Floating Glass Info -->
+                        <div class="absolute bottom-4 left-4 right-4 bg-slate-950/90 backdrop-blur-md p-4 rounded-2xl border border-white/10 z-20 flex justify-between items-center transform group-hover:-translate-y-1 transition-transform duration-300">
+                            <div>
+                                <span class="text-[9px] font-extrabold text-wuanpi-orange uppercase tracking-wider block">Estilo del Futuro</span>
+                                <h3 class="font-bold text-white text-sm line-clamp-1">Reloj Inteligente Tactical Pro</h3>
+                                <p class="text-xs text-slate-300">$ 159.900 <span class="line-through text-slate-600 ml-1">$ 319.900</span></p>
+                            </div>
+                            <button onclick="quickView(1)" class="px-3.5 py-2 bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white font-bold rounded-xl text-xs transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-eye"></i> Ver
+                            </button>
+                        </div>
+                        <!-- Main Product Image -->
+                        <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=600" alt="Viral Tactical Watch" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL-TIME LIVE PURCHASE POPUP (Dropshipping proof) -->
+    <div id="live-purchase-toast" class="fixed bottom-6 left-6 z-50 max-w-sm bg-slate-900/95 backdrop-blur-md p-4 rounded-2xl border border-slate-800 shadow-2xl flex items-center gap-3.5 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-500">
+        <div class="w-12 h-12 rounded-xl bg-slate-800 flex-shrink-0 overflow-hidden border border-slate-700">
+            <img id="live-toast-img" src="" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="text-xs">
+            <p class="text-slate-400"><strong class="text-white" id="live-toast-user">Andrés</strong> de <span class="text-wuanpi-orange" id="live-toast-city">Cali</span></p>
+            <p class="font-bold text-white line-clamp-1" id="live-toast-item">Reloj Tactical Pro V2</p>
+            <p class="text-[10px] text-wuanpi-neonGreen font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> Compró <span id="live-toast-time">hace 1 minuto</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- VALUE PROPS (DROPSHIPPING CONFIDENCE) -->
+    <section id="ventajas" class="py-12 bg-slate-950 border-b border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-wuanpi-orange/10 flex items-center justify-center text-wuanpi-orange text-xl flex-shrink-0">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Despacho Inmediato</h4>
+                        <p class="text-xs text-slate-400">Rastreo 24 horas después</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-wuanpi-neonGreen/10 flex items-center justify-center text-wuanpi-neonGreen text-xl flex-shrink-0">
+                        <i class="fa-solid fa-handshake-simple"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Garantía Absoluta</h4>
+                        <p class="text-xs text-slate-400">¿No te gustó? Lo devuelves</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-xl flex-shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Compra Protegida</h4>
+                        <p class="text-xs text-slate-400">Nadie te cobrará antes de llegar</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl flex-shrink-0">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Soporte Express</h4>
+                        <p class="text-xs text-slate-400">Chat WhatsApp instantáneo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN STORE CATALOGUE -->
+    <section id="catalogo" class="py-16 bg-[#090d16] flex-grow scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Category Header -->
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-extrabold text-wuanpi-orange uppercase tracking-widest block mb-2">🔥 Productos Virales</span>
+                <h2 class="text-3xl md:text-4xl font-black text-white">Catálogo de Tendencias</h2>
+                <p class="text-slate-400 mt-2 text-sm md:text-base">Haz clic para ver detalles, elegir tallas, colores o comprar directamente por WhatsApp.</p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="bg-slate-900/80 p-4 rounded-2xl shadow-lg border border-slate-800 mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+                
+                <!-- Category Buttons Carousel -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none max-w-full">
+                    <button onclick="filterCategory('all')" id="btn-cat-all" class="category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-wuanpi-orange text-white shadow-lg shadow-wuanpi-orange/20 transition-all">
+                        🚀 Todos los Productos
+                    </button>
+                    <button onclick="filterCategory('tecnologia')" id="btn-cat-tecnologia" class="category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-950 text-slate-400 border border-slate-800 hover:bg-slate-900 transition-all">
+                        🔌 Tecnología & Gadgets
+                    </button>
+                    <button onclick="filterCategory('streetwear')" id="btn-cat-streetwear" class="category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-950 text-slate-400 border border-slate-800 hover:bg-slate-900 transition-all">
+                        👕 Ropa Streetwear
+                    </button>
+                    <button onclick="filterCategory('calzado')" id="btn-cat-calzado" class="category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-950 text-slate-400 border border-slate-800 hover:bg-slate-900 transition-all">
+                        👟 Calzado Trend
+                    </button>
+                    <button onclick="filterCategory('accesorios')" id="btn-cat-accesorios" class="category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-950 text-slate-400 border border-slate-800 hover:bg-slate-900 transition-all">
+                        🎒 Accesorios Virales
+                    </button>
+                </div>
+
+                <!-- Sort option -->
+                <div class="flex items-center gap-3">
+                    <label for="sort-select" class="text-[10px] text-slate-400 font-bold whitespace-nowrap">ORDENAR:</label>
+                    <select id="sort-select" onchange="handleSort(this.value)" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs font-semibold rounded-xl px-3 py-2 outline-none focus:ring-1 focus:ring-wuanpi-orange transition-all">
+                        <option value="popular">Más Populares</option>
+                        <option value="low-high">Precio: Menor a Mayor</option>
+                        <option value="high-low">Precio: Mayor a Menor</option>
+                        <option value="rating">Calificación</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamically Rendered Products -->
+            </div>
+
+            <!-- Empty results state -->
+            <div id="empty-state" class="hidden text-center py-16 space-y-4 bg-slate-900/30 rounded-3xl border border-slate-850">
+                <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto text-slate-500 text-2xl">
+                    <i class="fa-solid fa-shop-slash"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-lg">No se encontraron productos</h3>
+                    <p class="text-slate-400 text-sm">Prueba con otra palabra clave o limpia tus filtros.</p>
+                </div>
+                <button onclick="resetFilters()" class="px-5 py-2.5 bg-wuanpi-orange text-white font-bold text-xs rounded-xl hover:bg-wuanpi-orangeHover transition-all">
+                    Restablecer Filtros
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SLIDE-OVER CART DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 overflow-hidden">
+            <!-- Background overlay -->
+            <div id="cart-overlay" onclick="toggleCart(false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                <!-- Sliding panel -->
+                <div id="cart-panel" class="pointer-events-auto w-screen max-w-md translate-x-full transition-transform duration-300 ease-in-out bg-[#090d16] border-l border-slate-800 shadow-2xl flex flex-col h-full">
+                    
+                    <!-- Cart Header -->
+                    <div class="px-6 py-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-wuanpi-orange text-xl"></i>
+                            <h2 class="text-lg font-extrabold text-white" id="slide-over-title">Tu Pedido</h2>
+                        </div>
+                        <button onclick="toggleCart(false)" class="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Content -->
+                    <div class="flex-1 overflow-y-auto px-6 py-4 space-y-4" id="cart-items-container">
+                        <!-- Items rendered via JS -->
+                    </div>
+
+                    <!-- Cart Summary/Checkout area -->
+                    <div class="px-6 py-6 border-t border-slate-800 bg-slate-950/80 space-y-4">
+                        
+                        <!-- Promo Code section -->
+                        <div>
+                            <label for="coupon-input" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">¿Cupón de descuento?</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="coupon-input" placeholder="Ej: WUANPI10" class="flex-1 px-3 py-2 text-xs bg-slate-900 border border-slate-800 rounded-xl focus:border-wuanpi-orange outline-none uppercase font-bold text-white">
+                                <button onclick="applyCoupon()" class="px-4 py-2 bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white text-xs font-bold rounded-xl transition-colors">Aplicar</button>
+                            </div>
+                            <p id="coupon-feedback" class="text-[11px] font-semibold mt-1 hidden"></p>
+                        </div>
+
+                        <!-- Calculations -->
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between text-slate-400">
+                                <span>Subtotal</span>
+                                <span id="cart-subtotal" class="font-semibold text-white">$ 0</span>
+                            </div>
+                            <div class="flex justify-between text-slate-400" id="discount-row" style="display: none;">
+                                <span>Descuento (<span id="discount-pct">0</span>%)</span>
+                                <span id="cart-discount" class="font-semibold text-wuanpi-neonGreen">-$ 0</span>
+                            </div>
+                            <div class="flex justify-between text-slate-400">
+                                <span>Envío</span>
+                                <span id="cart-shipping" class="font-semibold text-wuanpi-neonGreen">GRATIS</span>
+                            </div>
+                            <hr class="border-slate-800 my-2">
+                            <div class="flex justify-between items-end text-white">
+                                <span class="font-bold text-sm">Total</span>
+                                <span id="cart-total" class="font-black text-xl text-wuanpi-orange">$ 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Checkout CTAs -->
+                        <div class="pt-2 space-y-2">
+                            <button onclick="startCheckout('whatsapp')" class="w-full py-3.5 bg-wuanpi-neonGreen hover:bg-emerald-600 text-white font-extrabold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Comprar por WhatsApp (Rápido)
+                            </button>
+                            <button onclick="startCheckout('simulated')" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold rounded-xl border border-slate-800 transition-all flex items-center justify-center gap-2 text-xs">
+                                <i class="fa-solid fa-truck"></i> Pago Contra Entrega / PSE
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DROPSHIPPING PRODUCT QUICK VIEW MODAL -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background Overlay -->
+            <div onclick="closeQuickView()" class="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"></div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Modal Content -->
+            <div class="inline-block align-bottom bg-[#090d16] rounded-3xl text-left overflow-hidden shadow-2xl border border-slate-800 transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full relative">
+                
+                <!-- Close Button -->
+                <button onclick="closeQuickView()" class="absolute top-4 right-4 z-10 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+
+                <!-- Grid Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    
+                    <!-- Product Image -->
+                    <div class="relative bg-slate-950 min-h-[320px] md:min-h-[480px]">
+                        <img id="qv-img" src="" alt="" class="w-full h-full object-cover">
+                        <span id="qv-badge" class="absolute top-4 left-4 px-3 py-1 bg-wuanpi-orange text-white text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-md"></span>
+                    </div>
+
+                    <!-- Info Panel -->
+                    <div class="p-8 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <!-- Category and Ratings -->
+                            <div class="flex items-center justify-between">
+                                <span id="qv-category" class="text-xs font-extrabold text-wuanpi-orange uppercase tracking-wider"></span>
+                                <div class="flex items-center gap-1.5 text-amber-400">
+                                    <i class="fa-solid fa-star text-xs"></i>
+                                    <span id="qv-rating" class="text-xs font-bold text-white"></span>
+                                    <span id="qv-reviews" class="text-[11px] text-slate-400 font-medium"></span>
+                                </div>
+                            </div>
+
+                            <!-- Title & Prices -->
+                            <div>
+                                <h2 id="qv-name" class="text-2xl font-black text-white tracking-tight leading-tight"></h2>
+                                <div class="flex items-baseline gap-3 mt-1.5">
+                                    <span id="qv-price" class="text-2xl font-black text-wuanpi-orange"></span>
+                                    <span id="qv-old-price" class="text-sm text-slate-500 line-through font-medium hidden"></span>
+                                </div>
+                            </div>
+
+                            <!-- Dropshipping scarcity urgency timer in modal -->
+                            <div class="p-3 bg-red-950/20 border border-red-900/40 rounded-xl text-xs flex items-center justify-between">
+                                <span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Oferta por tiempo limitado</span>
+                                <span id="qv-stock" class="font-extrabold text-white">¡Quedan pocas unidades!</span>
+                            </div>
+
+                            <!-- Description -->
+                            <p id="qv-desc" class="text-xs text-slate-400 leading-relaxed"></p>
+
+                            <!-- Size Selector -->
+                            <div id="qv-size-wrapper" class="space-y-2">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Seleccionar Variante / Talla</span>
+                                <div id="qv-sizes" class="flex flex-wrap gap-2"></div>
+                            </div>
+
+                            <!-- Color Selector -->
+                            <div id="qv-color-wrapper" class="space-y-2">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Seleccionar Color</span>
+                                <div id="qv-colors" class="flex gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="pt-4 border-t border-slate-800 flex gap-4">
+                            <div class="flex items-center border border-slate-800 rounded-xl bg-slate-950">
+                                <button onclick="adjustQvQty(-1)" class="px-3.5 py-2.5 text-slate-400 hover:text-white font-bold text-sm">-</button>
+                                <span id="qv-qty" class="w-8 text-center font-bold text-xs text-white">1</span>
+                                <button onclick="adjustQvQty(1)" class="px-3.5 py-2.5 text-slate-400 hover:text-white font-bold text-sm">+</button>
+                            </div>
+                            <button id="qv-add-to-cart-btn" class="flex-1 py-3 bg-gradient-to-r from-wuanpi-orange to-amber-500 hover:from-wuanpi-orangeHover hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-wuanpi-orange/15 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-plus"></i> Agregar al Pedido
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- DOUBLE CHECKOUT MODAL: CHOOSE WHATSAPP OR SIMULATED -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Overlay -->
+            <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCheckout()"></div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Modal Box -->
+            <div class="inline-block align-bottom bg-[#090d16] rounded-3xl text-left overflow-hidden shadow-2xl border border-slate-800 transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full p-8 relative">
+                
+                <!-- Close Button -->
+                <button onclick="closeCheckout()" class="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+
+                <!-- Steps Navigation Header -->
+                <div class="flex justify-between items-center pb-6 border-b border-slate-800 mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-wuanpi-orange uppercase tracking-wider">Finalizar Compra</span>
+                        <h3 class="text-xl font-black text-white" id="checkout-title">Datos para tu Envío</h3>
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-bold uppercase bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">
+                        Paso <span id="checkout-step-num">1</span> de 2
+                    </div>
+                </div>
+
+                <!-- Shipping and contact Form -->
+                <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
+                    
+                    <!-- STEP 1: SHIPPING DATA -->
+                    <div id="step-1-content" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Nombre y Apellido</label>
+                                <input type="text" required id="co-name" placeholder="Ej: Juan Pérez" class="w-full px-4 py-3 text-xs bg-slate-950 border border-slate-800 rounded-xl outline-none text-white focus:border-wuanpi-orange transition-all">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Celular (WhatsApp)</label>
+                                <input type="tel" required id="co-phone" placeholder="Ej: 300 123 4567" class="w-full px-4 py-3 text-xs bg-slate-950 border border-slate-800 rounded-xl outline-none text-white focus:border-wuanpi-orange transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Dirección Completa (Casa, Apt, Barrio)</label>
+                            <input type="text" required id="co-address" placeholder="Ej: Calle 5 # 10-25 Conjunto Los Rosales Apto 302" class="w-full px-4 py-3 text-xs bg-slate-950 border border-slate-800 rounded-xl outline-none text-white focus:border-wuanpi-orange transition-all">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Ciudad / Municipio</label>
+                                <input type="text" required id="co-city" placeholder="Ej: Cali, Valle" class="w-full px-4 py-3 text-xs bg-slate-950 border border-slate-800 rounded-xl outline-none text-white focus:border-wuanpi-orange transition-all">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Correo Electrónico</label>
+                                <input type="email" required id="co-email" placeholder="Ej: juan@gmail.com" class="w-full px-4 py-3 text-xs bg-slate-950 border border-slate-800 rounded-xl outline-none text-white focus:border-wuanpi-orange transition-all">
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="button" onclick="goToStep(2)" class="w-full py-3.5 bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white font-bold rounded-xl transition-all shadow-lg shadow-wuanpi-orange/20 flex items-center justify-center gap-2">
+                                Continuar <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: METHOD & SIMULATION -->
+                    <div id="step-2-content" class="space-y-4 hidden">
+                        <div class="space-y-2.5">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Selecciona Método de Despacho</span>
+                            
+                            <!-- Payment option cards -->
+                            <label class="flex items-center justify-between p-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded-2xl cursor-pointer transition-all">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="payment-method" value="contraentrega" checked class="text-wuanpi-orange focus:ring-wuanpi-orange">
+                                    <div>
+                                        <div class="text-white text-xs font-bold">Pago Contra Entrega</div>
+                                        <div class="text-[10px] text-wuanpi-neonGreen font-semibold">Paga en efectivo al repartidor</div>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-hand-holding-dollar text-slate-400 text-lg"></i>
+                            </label>
+
+                            <label class="flex items-center justify-between p-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 rounded-2xl cursor-pointer transition-all">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="payment-method" value="pse" class="text-wuanpi-orange focus:ring-wuanpi-orange">
+                                    <div>
+                                        <div class="text-white text-xs font-bold">Transferencia Bancaria / PSE</div>
+                                        <div class="text-[10px] text-slate-400">Nequi, Daviplata, Bancolombia</div>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-building-columns text-slate-400 text-lg"></i>
+                            </label>
+                        </div>
+
+                        <!-- Info Simulation warning -->
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-start gap-2.5">
+                            <i class="fa-solid fa-truck-fast text-wuanpi-orange mt-0.5"></i>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                <strong>Garantía de Tienda Wuanpi:</strong> No cobramos nada por adelantado. Tu compra está asegurada contra todo riesgo hasta la entrega.
+                            </p>
+                        </div>
+
+                        <div class="pt-4 grid grid-cols-2 gap-3">
+                            <button type="button" onclick="goToStep(1)" class="py-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold rounded-xl text-xs transition-all">
+                                Volver
+                            </button>
+                            <button type="submit" class="py-3 bg-wuanpi-neonGreen hover:bg-emerald-600 text-white font-extrabold rounded-xl text-xs transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> Finalizar Pedido
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS PURCHASE MODAL -->
+    <div id="success-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Overlay -->
+            <div class="fixed inset-0 bg-black/85 backdrop-blur-sm"></div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Modal Panel -->
+            <div class="inline-block align-bottom bg-[#090d16] rounded-3xl text-center overflow-hidden border border-slate-800 shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full p-8 relative">
+                <div class="w-16 h-16 bg-emerald-950 text-wuanpi-neonGreen border border-emerald-800 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="fa-solid fa-check animate-bounce"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white leading-tight">¡Tu Pedido ha Sido Registrado!</h3>
+                <p class="text-xs text-slate-400 mt-2">
+                    ¡Gracias por confiar en nosotros, <span id="success-customer-name" class="font-bold text-white"></span>! Tu pedido entrará a despacho inmediatamente de manera gratuita.
+                </p>
+                
+                <div class="my-6 p-4 bg-slate-950 rounded-2xl border border-slate-800 text-left text-xs space-y-2">
+                    <p class="text-slate-400">ID de Pedido: <strong class="text-white" id="success-order-id">#WP-50212</strong></p>
+                    <p class="text-slate-400">Método de Despacho: <strong class="text-wuanpi-orange" id="success-method">Pago Contra Entrega</strong></p>
+                    <p class="text-slate-400">Total a Pagar al Recibir: <strong class="text-white" id="success-total"></strong></p>
+                    <p class="text-slate-400">Dirección: <span class="text-slate-300" id="success-address"></span></p>
+                </div>
+
+                <div class="space-y-2">
+                    <button id="success-whatsapp-btn" class="w-full py-3 bg-wuanpi-neonGreen hover:bg-emerald-600 text-white font-extrabold rounded-xl transition-all text-xs flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Enviar Recibo a WhatsApp
+                    </button>
+                    <button onclick="closeSuccessModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold rounded-xl transition-all text-xs">
+                        Seguir Navegando
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS BOX -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3.5 max-w-sm pointer-events-none"></div>
+
+    <!-- GUARANTEE AND TRACKING SECTION -->
+    <section id="garantia" class="py-20 bg-slate-950 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-extrabold text-wuanpi-orange uppercase tracking-widest block mb-2">🚚 Garantía de Compra</span>
+                <h2 class="text-3xl font-black text-white">Envíos Rápidos & Seguros</h2>
+                <p class="text-slate-400 text-sm mt-1">Sabemos que el dropshipping genera dudas. Aquí tienes todo transparente sobre cómo entregamos felicidad.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-900/40 p-6 rounded-3xl border border-slate-850 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-lg">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base">Rastreo Completo</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Te enviaremos el número de rastreo de Servientrega, Interrapidísimo o Coordinadora directamente a tu WhatsApp en cuanto despachemos.
+                    </p>
+                </div>
+                <div class="bg-slate-900/40 p-6 rounded-3xl border border-slate-850 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-wuanpi-orange/10 flex items-center justify-center text-wuanpi-orange text-lg">
+                        <i class="fa-solid fa-rotate"></i>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base">Devolución en 30 Días</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Si el producto que compraste no era de tu talla o tiene algún desperfecto de fábrica, lo solucionamos de inmediato sin costo extra.
+                    </p>
+                </div>
+                <div class="bg-slate-900/40 p-6 rounded-3xl border border-slate-850 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-wuanpi-neonGreen/10 flex items-center justify-center text-wuanpi-neonGreen text-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base">Cero Complicaciones</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        ¡Pagas cuando el mensajero llegue a tu casa! Sin riesgos, sin necesidad de tarjeta de crédito si no la tienes disponible.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER & VIRAL DISCOUNTS -->
+    <section class="py-20 bg-gradient-to-br from-slate-900 via-wuanpi-dark to-slate-950 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+            <span class="text-xs font-extrabold text-wuanpi-orange uppercase tracking-widest">¡Que no se te pase!</span>
+            <h2 class="text-3xl md:text-4xl font-black">Únete al Club Viral Wuanpi</h2>
+            <p class="text-slate-400 text-sm max-w-xl mx-auto">
+                ¿Quieres recibir descuentos secretos y enterarte de los próximos productos virales de TikTok antes que nadie? Déjanos tu correo electrónico.
+            </p>
+
+            <form onsubmit="handleNewsletterSubmit(event)" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+                <input type="email" required placeholder="Tu correo electrónico" class="flex-grow px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-xs outline-none focus:border-wuanpi-orange text-white">
+                <button type="submit" class="px-6 py-3 bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white font-extrabold text-xs rounded-xl transition-all shadow-md">
+                    Suscribirme gratis
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-500 border-t border-slate-900 py-12 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <!-- Brand col -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-wuanpi-600 to-wuanpi-orange flex items-center justify-center text-white font-black text-sm">
+                            W
+                        </div>
+                        <span class="text-lg font-extrabold text-white">Tienda Wuanpi</span>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        E-commerce líder en la selección de los productos más novedosos, gadgets y streetwear directamente en tu hogar.
+                    </p>
+                </div>
+
+                <!-- Collections -->
+                <div>
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Tendencias</h5>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#catalogo" onclick="filterCategory('tecnologia')" class="hover:text-wuanpi-orange transition-colors">Tecnología Inteligente</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('streetwear')" class="hover:text-wuanpi-orange transition-colors">Streetwear & Estilo</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('calzado')" class="hover:text-wuanpi-orange transition-colors">Calzado de Moda</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('accesorios')" class="hover:text-wuanpi-orange transition-colors">Accesorios del Momento</a></li>
+                    </ul>
+                </div>
+
+                <!-- Trust / Legal -->
+                <div>
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Información</h5>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#garantia" class="hover:text-wuanpi-orange transition-colors">Rastrear mi Paquete</a></li>
+                        <li><a href="#garantia" class="hover:text-wuanpi-orange transition-colors">Políticas de Devoluciones</a></li>
+                        <li><a href="#garantia" class="hover:text-wuanpi-orange transition-colors">Términos de Envío</a></li>
+                        <li><a href="#garantia" class="hover:text-wuanpi-orange transition-colors">Garantía de Satisfacción</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="space-y-3">
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-4">¿Necesitas Ayuda?</h5>
+                    <p class="text-slate-400">Escríbenos directamente para resolver cualquier duda.</p>
+                    <a href="https://wa.me/573001234567" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-wuanpi-neonGreen font-bold py-2.5 px-4 rounded-xl transition-all">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Soporte VIP WhatsApp
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Divider -->
+            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 Tienda Wuanpi. Todos los derechos reservados.</p>
+                <div class="flex gap-4">
+                    <span>Desarrollado con ❤️ para Wuanpi Dropship</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- APP STATE JAVASCRIPT -->
+    <script>
+        // Helper function to format COP Currency nicely (e.g. $ 159.900)
+        function formatCOP(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+
+        // State storage
+        let state = {
+            currentCategory: 'all',
+            searchQuery: '',
+            sortBy: 'popular',
+            cart: JSON.parse(localStorage.getItem('wuanpi_cart')) || [],
+            coupon: null,
+            quickViewProduct: null,
+            quickViewQty: 1,
+            selectedSize: null,
+            selectedColor: null,
+            checkoutType: 'simulated' // simulated or whatsapp
+        };
+
+        // Initialize Shop Catalog on load
+        window.onload = function() {
+            renderProducts();
+            updateCartUI();
+            startCountdownTimer();
+            initSocialProofLoop();
+        };
+
+        // Toast Notification Helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const icons = {
+                success: '<i class="fa-solid fa-circle-check text-wuanpi-neonGreen text-base"></i>',
+                info: '<i class="fa-solid fa-fire text-wuanpi-orange text-base"></i>',
+                warning: '<i class="fa-solid fa-triangle-exclamation text-amber-500 text-base"></i>'
+            };
+
+            toast.className = `flex items-center gap-3.5 p-4 bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-800 pointer-events-auto transition-all duration-300 transform translate-x-12 opacity-0`;
+            toast.innerHTML = `
+                <div class="flex-shrink-0">${icons[type] || icons.success}</div>
+                <div class="text-xs font-bold text-white">${message}</div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-12', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Live purchase social proof loops
+        function initSocialProofLoop() {
+            const liveToast = document.getElementById('live-purchase-toast');
+            const img = document.getElementById('live-toast-img');
+            const user = document.getElementById('live-toast-user');
+            const city = document.getElementById('live-toast-city');
+            const item = document.getElementById('live-toast-item');
+            const time = document.getElementById('live-toast-time');
+
+            function showRandomPurchase() {
+                const buyer = BUYERS[Math.floor(Math.random() * BUYERS.length)];
+                const product = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
+
+                img.src = product.image;
+                user.innerText = buyer.name;
+                city.innerText = buyer.city;
+                item.innerText = product.name;
+                time.innerText = buyer.time;
+
+                // Animate entrance
+                liveToast.classList.remove('translate-y-32', 'opacity-0');
+                
+                // Hide after 6 seconds
+                setTimeout(() => {
+                    liveToast.classList.add('translate-y-32', 'opacity-0');
+                }, 6000);
+            }
+
+            // Trigger every 18 seconds
+            setInterval(showRandomPurchase, 18000);
+            // First trigger after 4 seconds
+            setTimeout(showRandomPurchase, 4000);
+        }
+
+        // Urgency Countdown Timer (3 hours loop reset)
+        function startCountdownTimer() {
+            const timerEl = document.getElementById('promo-timer');
+            let totalSeconds = 3 * 60 * 60 + 45 * 60; // 3 hours 45 mins
+
+            function updateTime() {
+                let hrs = Math.floor(totalSeconds / 3600);
+                let mins = Math.floor((totalSeconds % 3600) / 60);
+                let secs = totalSeconds % 60;
+
+                hrs = hrs < 10 ? '0' + hrs : hrs;
+                mins = mins < 10 ? '0' + mins : mins;
+                secs = secs < 10 ? '0' + secs : secs;
+
+                timerEl.innerText = `${hrs}:${mins}:${secs}`;
+                
+                if (totalSeconds <= 0) {
+                    totalSeconds = 3 * 60 * 60; // reset
+                } else {
+                    totalSeconds--;
+                }
+            }
+
+            setInterval(updateTime, 1000);
+            updateTime();
+        }
+
+        // Searching Product Handler
+        function handleSearch(val) {
+            state.searchQuery = val.trim().toLowerCase();
+            renderProducts();
+        }
+
+        // Sorting
+        function handleSort(val) {
+            state.sortBy = val;
+            renderProducts();
+        }
+
+        // Category Filter
+        function filterCategory(cat) {
+            state.currentCategory = cat;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.className = 'category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-950 text-slate-400 border border-slate-800 hover:bg-slate-900 transition-all';
+            });
+
+            const activeBtn = document.getElementById(`btn-cat-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = 'category-btn px-5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-wuanpi-orange text-white shadow-lg shadow-wuanpi-orange/20 transition-all';
+            }
+
+            renderProducts();
+        }
+
+        // Reset Filter Helpers
+        function resetFilters() {
+            state.searchQuery = '';
+            state.currentCategory = 'all';
+            state.sortBy = 'popular';
+            
+            const sInput1 = document.getElementById('global-search');
+            if (sInput1) sInput1.value = '';
+            const sInput2 = document.getElementById('mobile-search');
+            if (sInput2) sInput2.value = '';
+
+            const sortSel = document.getElementById('sort-select');
+            if (sortSel) sortSel.value = 'popular';
+
+            filterCategory('all');
+        }
+
+        // Dynamic Product Renderer
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Filtering
+            let items = PRODUCTS.filter(p => {
+                const matchesCategory = state.currentCategory === 'all' || p.category === state.currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(state.searchQuery) || p.desc.toLowerCase().includes(state.searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            // Sorting
+            if (state.sortBy === 'low-high') {
+                items.sort((a, b) => a.price - b.price);
+            } else if (state.sortBy === 'high-low') {
+                items.sort((a, b) => b.price - a.price);
+            } else if (state.sortBy === 'rating') {
+                items.sort((a, b) => b.rating - a.rating);
+            }
+
+            grid.innerHTML = '';
+            
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+            }
+
+            items.forEach(product => {
+                const discPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+
+                const cardHtml = `
+                    <div class="bg-[#111827]/40 rounded-3xl overflow-hidden border border-slate-850 hover:border-slate-800 transform hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between relative group shadow-lg">
+                        
+                        <!-- Image Wrap -->
+                        <div class="relative bg-slate-950 aspect-square overflow-hidden">
+                            <!-- High Scarcity Badges -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+                                ${product.badge ? `<span class="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-white rounded-lg shadow-md bg-wuanpi-orange">${product.badge}</span>` : ''}
+                                <span class="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-white rounded-lg shadow-md bg-red-600">-${discPercent}%</span>
+                            </div>
+                            
+                            <!-- Action overlay for quick buy -->
+                            <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300 z-10">
+                                <button onclick="quickView(${product.id})" class="w-11 h-11 rounded-xl bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all font-bold">
+                                    <i class="fa-solid fa-eye text-sm"></i>
+                                </button>
+                                <button onclick="addToCartQuick(${product.id})" class="w-11 h-11 rounded-xl bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all font-bold">
+                                    <i class="fa-solid fa-cart-plus text-sm"></i>
+                                </button>
+                            </div>
+
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </div>
+
+                        <!-- Content details -->
+                        <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                            <div class="space-y-1.5">
+                                <span class="text-[9px] font-extrabold text-wuanpi-orange uppercase tracking-widest block">${product.category}</span>
+                                <h3 onclick="quickView(${product.id})" class="font-bold text-white text-sm hover:text-wuanpi-orange transition-colors cursor-pointer line-clamp-1">${product.name}</h3>
+                                
+                                <div class="flex items-center gap-1.5">
+                                    <div class="flex items-center gap-0.5 text-amber-400">
+                                        <i class="fa-solid fa-star text-[10px]"></i>
+                                        <span class="text-xs font-bold text-white">${product.rating}</span>
+                                    </div>
+                                    <span class="text-[10px] text-slate-500">(${product.reviews} reseñas)</span>
+                                    <span class="text-[10px] text-red-400 font-semibold ml-auto"><i class="fa-solid fa-triangle-exclamation"></i> ¡Solo quedan ${product.stock}!</span>
+                                </div>
+                            </div>
+
+                            <!-- Prices and buttons -->
+                            <div class="flex items-center justify-between pt-2.5 border-t border-slate-900">
+                                <div class="flex flex-col">
+                                    <span class="text-base font-black text-white">${formatCOP(product.price)}</span>
+                                    <span class="text-xs text-slate-500 line-through font-medium">${formatCOP(product.originalPrice)}</span>
+                                </div>
+                                <button onclick="quickView(${product.id})" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white text-xs font-bold rounded-xl transition-all">
+                                    Ver Oferta
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // Toggle Drawer Cart Panel
+        function toggleCart(isOpen) {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const panel = document.getElementById('cart-panel');
+
+            if (isOpen) {
+                drawer.classList.remove('pointer-events-none');
+                overlay.classList.remove('pointer-events-none', 'opacity-0');
+                overlay.classList.add('opacity-100');
+                panel.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('pointer-events-none', 'opacity-0');
+                overlay.classList.remove('opacity-100');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('pointer-events-none');
+                }, 300);
+            }
+        }
+
+        // Simple Cart items quick adder
+        function addToCartQuick(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const size = product.sizes[0] || 'N/A';
+            const color = product.colors[0] || 'N/A';
+            
+            addItemToCart(product.id, 1, size, color);
+            showToast(`Añadido: ${product.name}`);
+        }
+
+        // Cart manipulation logic
+        function addItemToCart(id, qty, size, color) {
+            const product = PRODUCTS.find(p => p.id === id);
+            
+            const matchIndex = state.cart.findIndex(item => 
+                item.id === id && item.size === size && item.color === color
+            );
+
+            if (matchIndex > -1) {
+                state.cart[matchIndex].qty += qty;
+            } else {
+                state.cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    qty: qty,
+                    size: size,
+                    color: color
+                });
+            }
+
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateItemQty(index, offset) {
+            state.cart[index].qty += offset;
+            if (state.cart[index].qty <= 0) {
+                state.cart.splice(index, 1);
+                showToast("Producto eliminado", "warning");
+            }
+            saveCart();
+            updateCartUI();
+        }
+
+        function removeCartItem(index) {
+            state.cart.splice(index, 1);
+            showToast("Producto eliminado", "warning");
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            localStorage.setItem('wuanpi_cart', JSON.stringify(state.cart));
+        }
+
+        // Refresh Cart Interface & Estimates
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const counter = document.getElementById('cart-counter');
+            
+            container.innerHTML = '';
+            
+            let totalQty = 0;
+            let subtotal = 0;
+
+            if (state.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-center space-y-4">
+                        <div class="w-16 h-16 bg-slate-900 border border-slate-800 text-slate-500 rounded-full flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-fire-burner"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Tu carrito está vacío</p>
+                            <p class="text-[11px] text-slate-500 max-w-[220px] mx-auto mt-1">¡Aprovecha hoy el envío gratuito a toda Colombia!</p>
+                        </div>
+                        <button onclick="toggleCart(false)" class="px-5 py-2.5 bg-wuanpi-orange hover:bg-wuanpi-orangeHover text-white font-bold text-xs rounded-xl transition-all">
+                            Ver Productos Virales
+                        </button>
+                    </div>
+                `;
+            } else {
+                state.cart.forEach((item, index) => {
+                    totalQty += item.qty;
+                    subtotal += item.price * item.qty;
+
+                    const itemHtml = `
+                        <div class="flex gap-4 p-3 bg-slate-900/60 border border-slate-850 rounded-2xl relative">
+                            <!-- Image -->
+                            <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-slate-850">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                            </div>
+                            <!-- Meta Info -->
+                            <div class="flex-grow flex flex-col justify-between">
+                                <div class="pr-5">
+                                    <h4 class="font-bold text-white text-xs line-clamp-1">${item.name}</h4>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-[9px] font-bold bg-slate-950 text-slate-300 px-1.5 py-0.5 rounded">Talla: ${item.size}</span>
+                                        <span class="w-3.5 h-3.5 rounded-full border border-[#090d16]" style="background-color: ${item.color};"></span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span class="text-xs font-black text-wuanpi-orange">${formatCOP(item.price * item.qty)}</span>
+                                    <!-- Qty Selector -->
+                                    <div class="flex items-center border border-slate-800 rounded-lg bg-slate-950 scale-90">
+                                        <button onclick="updateItemQty(${index}, -1)" class="px-2 py-0.5 text-slate-500 hover:text-white font-bold">-</button>
+                                        <span class="px-2 text-xs font-bold text-slate-300">${item.qty}</span>
+                                        <button onclick="updateItemQty(${index}, 1)" class="px-2 py-0.5 text-slate-500 hover:text-white font-bold">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Trash icon -->
+                            <button onclick="removeCartItem(${index})" class="absolute top-2.5 right-2.5 text-slate-500 hover:text-red-400">
+                                <i class="fa-regular fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', itemHtml);
+                });
+            }
+
+            // Calculations
+            let discountValue = 0;
+            if (state.coupon) {
+                discountValue = subtotal * state.coupon.discount;
+            }
+
+            const total = subtotal - discountValue;
+
+            document.getElementById('cart-subtotal').innerText = formatCOP(subtotal);
+            document.getElementById('cart-total').innerText = formatCOP(total);
+
+            const discountRow = document.getElementById('discount-row');
+            if (state.coupon && subtotal > 0) {
+                discountRow.style.display = 'flex';
+                document.getElementById('discount-pct').innerText = state.coupon.discount * 100;
+                document.getElementById('cart-discount').innerText = `-${formatCOP(discountValue)}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+
+            // Handle cart badge
+            if (totalQty > 0) {
+                counter.innerText = totalQty;
+                counter.classList.remove('scale-0');
+                counter.classList.add('scale-100');
+            } else {
+                counter.classList.remove('scale-100');
+                counter.classList.add('scale-0');
+            }
+        }
+
+        // Apply discount coupon
+        function applyCoupon() {
+            const input = document.getElementById('coupon-input').value.trim().toUpperCase();
+            const feedback = document.getElementById('coupon-feedback');
+
+            if (input === 'WUANPI10') {
+                state.coupon = { code: 'WUANPI10', discount: 0.10 };
+                feedback.className = "text-[11px] font-bold mt-1 text-wuanpi-neonGreen";
+                feedback.innerText = "¡Cupón WUANPI10 aplicado con éxito! (10% OFF)";
+                showToast("¡Felicidades! 10% Descuento Aplicado");
+            } else {
+                feedback.className = "text-[11px] font-bold mt-1 text-red-400";
+                feedback.innerText = "Código de cupón inválido o caducado.";
+                state.coupon = null;
+            }
+            updateCartUI();
+        }
+
+        // Launch modal Quick view
+        function quickView(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            if (!product) return;
+
+            state.quickViewProduct = product;
+            state.quickViewQty = 1;
+            state.selectedSize = product.sizes[0] || 'N/A';
+            state.selectedColor = product.colors[0] || 'N/A';
+
+            document.getElementById('qv-img').src = product.image;
+            document.getElementById('qv-category').innerText = product.category;
+            document.getElementById('qv-name').innerText = product.name;
+            document.getElementById('qv-price').innerText = formatCOP(product.price);
+            
+            const oldPrice = document.getElementById('qv-old-price');
+            if (product.originalPrice) {
+                oldPrice.innerText = formatCOP(product.originalPrice);
+                oldPrice.classList.remove('hidden');
+            } else {
+                oldPrice.classList.add('hidden');
+            }
+
+            const badge = document.getElementById('qv-badge');
+            if (product.badge) {
+                badge.innerText = product.badge;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            document.getElementById('qv-rating').innerText = product.rating;
+            document.getElementById('qv-reviews').innerText = `(${product.reviews} reseñas verificadas)`;
+            document.getElementById('qv-desc').innerText = product.desc;
+            document.getElementById('qv-qty').innerText = "1";
+            document.getElementById('qv-stock').innerText = `¡Últimas ${product.stock} unidades en bodega!`;
+
+            // Render Sizes
+            const sizeBox = document.getElementById('qv-sizes');
+            const sizeWrapper = document.getElementById('qv-size-wrapper');
+            sizeBox.innerHTML = '';
+            
+            if (product.sizes && product.sizes.length > 0) {
+                sizeWrapper.classList.remove('hidden');
+                product.sizes.forEach((s, i) => {
+                    const activeClass = i === 0 ? 'border-wuanpi-orange text-wuanpi-orange bg-wuanpi-orange/10' : 'border-slate-800 text-slate-400 hover:bg-slate-900';
+                    const sBtn = document.createElement('button');
+                    sBtn.className = `px-3.5 py-2 border font-bold text-[11px] rounded-xl transition-all ${activeClass}`;
+                    sBtn.innerText = s;
+                    sBtn.onclick = () => selectSize(s, sBtn);
+                    sizeBox.appendChild(sBtn);
+                });
+            } else {
+                sizeWrapper.classList.add('hidden');
+            }
+
+            // Render Colors
+            const colorBox = document.getElementById('qv-colors');
+            const colorWrapper = document.getElementById('qv-color-wrapper');
+            colorBox.innerHTML = '';
+
+            if (product.colors && product.colors.length > 0) {
+                colorWrapper.classList.remove('hidden');
+                product.colors.forEach((c, i) => {
+                    const activeClass = i === 0 ? 'ring-2 ring-wuanpi-orange ring-offset-2 ring-offset-slate-950' : '';
+                    const cBtn = document.createElement('button');
+                    cBtn.className = `w-7 h-7 rounded-full border border-slate-800 transition-all ${activeClass}`;
+                    cBtn.style.backgroundColor = c;
+                    cBtn.onclick = () => selectColor(c, cBtn);
+                    colorBox.appendChild(cBtn);
+                });
+            } else {
+                colorWrapper.classList.add('hidden');
+            }
+
+            // Wire up submit item trigger
+            document.getElementById('qv-add-to-cart-btn').onclick = function() {
+                addItemToCart(product.id, state.quickViewQty, state.selectedSize, state.selectedColor);
+                closeQuickView();
+                showToast(`Se agregaron ${state.quickViewQty} artículo(s) al carrito.`);
+                toggleCart(true);
+            };
+
+            document.getElementById('quickview-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickview-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Selection Visual Handlers
+        function selectSize(size, element) {
+            state.selectedSize = size;
+            const parent = element.parentElement;
+            parent.querySelectorAll('button').forEach(btn => {
+                btn.className = 'px-3.5 py-2 border font-bold text-[11px] rounded-xl text-slate-400 border-slate-800 hover:bg-slate-900 transition-all';
+            });
+            element.className = 'px-3.5 py-2 border font-bold text-[11px] rounded-xl border-wuanpi-orange text-wuanpi-orange bg-wuanpi-orange/10 transition-all';
+        }
+
+        function selectColor(color, element) {
+            state.selectedColor = color;
+            const parent = element.parentElement;
+            parent.querySelectorAll('button').forEach(btn => {
+                btn.className = 'w-7 h-7 rounded-full border border-slate-800 transition-all';
+            });
+            element.className = 'w-7 h-7 rounded-full border border-slate-800 ring-2 ring-wuanpi-orange ring-offset-2 ring-offset-slate-950 transition-all';
+        }
+
+        function adjustQvQty(offset) {
+            state.quickViewQty += offset;
+            if (state.quickViewQty < 1) state.quickViewQty = 1;
+            document.getElementById('qv-qty').innerText = state.quickViewQty;
+        }
+
+        // STEPPED CHECKOUT INTEGRATION
+        function startCheckout(type) {
+            if (state.cart.length === 0) {
+                showToast("Por favor, agrega productos al pedido primero", "warning");
+                return;
+            }
+            state.checkoutType = type;
+            document.getElementById('checkout-form').reset();
+            goToStep(1);
+            
+            toggleCart(false);
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function goToStep(step) {
+            const title = document.getElementById('checkout-title');
+            const stepNum = document.getElementById('checkout-step-num');
+            const step1 = document.getElementById('step-1-content');
+            const step2 = document.getElementById('step-2-content');
+
+            // Quick validation for step 1
+            if (step === 2) {
+                const name = document.getElementById('co-name').value.trim();
+                const phone = document.getElementById('co-phone').value.trim();
+                const address = document.getElementById('co-address').value.trim();
+                const city = document.getElementById('co-city').value.trim();
+                const email = document.getElementById('co-email').value.trim();
+
+                if (!name || !phone || !address || !city || !email) {
+                    showToast("Por favor completa todos tus datos de envío.", "warning");
+                    return;
+                }
+            }
+
+            if (step === 1) {
+                title.innerText = "Datos para tu Envío";
+                stepNum.innerText = "1";
+                step1.classList.remove('hidden');
+                step2.classList.add('hidden');
+            } else if (step === 2) {
+                title.innerText = "Método de Despacho";
+                stepNum.innerText = "2";
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+            }
+        }
+
+        // Complete Order Logic & WhatsApp Preformation API Link Generation
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('co-name').value.trim();
+            const phone = document.getElementById('co-phone').value.trim();
+            const address = document.getElementById('co-address').value.trim();
+            const city = document.getElementById('co-city').value.trim();
+            const email = document.getElementById('co-email').value.trim();
+            const methodEl = document.querySelector('input[name="payment-method"]:checked');
+            const method = methodEl ? methodEl.value : 'contraentrega';
+
+            // Calculate final order details
+            let subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let discountValue = state.coupon ? (subtotal * state.coupon.discount) : 0;
+            const finalTotal = subtotal - discountValue;
+
+            closeCheckout();
+
+            // Setup Success modal fields
+            document.getElementById('success-customer-name').innerText = name;
+            document.getElementById('success-address').innerText = `${address}, ${city}`;
+            document.getElementById('success-total').innerText = formatCOP(finalTotal);
+            const mockOrderId = `#WP-${Math.floor(10000 + Math.random() * 90000)}`;
+            document.getElementById('success-order-id').innerText = mockOrderId;
+            document.getElementById('success-method').innerText = method === 'contraentrega' ? 'Pago Contra Entrega' : 'Transferencia PSE';
+
+            // Create highly formatted WhatsApp receipt message with local COP prices
+            let waText = `¡Hola *Tienda Wuanpi*! 👋\n`;
+            waText += `Acabo de realizar un pedido en la tienda virtual:\n\n`;
+            waText += `📌 *ID Pedido:* ${mockOrderId}\n`;
+            waText += `👤 *Cliente:* ${name}\n`;
+            waText += `📞 *Teléfono:* ${phone}\n`;
+            waText += `📍 *Dirección:* ${address}\n`;
+            waText += `🏙️ *Ciudad:* ${city}\n`;
+            waText += `📧 *Email:* ${email}\n`;
+            waText += `🚛 *Método:* ${method === 'contraentrega' ? 'Pago Contra Entrega 💵' : 'Transferencia Bancaria/PSE 🏦'}\n\n`;
+            waText += `📦 *PRODUCTOS:* \n`;
+            
+            state.cart.forEach(item => {
+                waText += `• ${item.name} (${item.qty}x) - Talla/Variante: ${item.size}\n`;
+            });
+            
+            if (state.coupon) {
+                waText += `\n🎟️ *Cupón Aplicado:* ${state.coupon.code} (10% OFF)\n`;
+            }
+            
+            waText += `\n💰 *TOTAL A PAGAR AL RECIBIR:* ${formatCOP(finalTotal)}\n\n`;
+            waText += `¡Por favor confírmenme el despacho del paquete! Quedo muy atento.`;
+
+            const encodedText = encodeURIComponent(waText);
+            const waLink = `https://wa.me/573001234567?text=${encodedText}`;
+
+            // Wire up direct receipts
+            document.getElementById('success-whatsapp-btn').onclick = function() {
+                window.open(waLink, '_blank');
+            };
+
+            // If user clicked WhatsApp checkout directly, redirect now!
+            if (state.checkoutType === 'whatsapp') {
+                window.open(waLink, '_blank');
+            }
+
+            // Clear Cart
+            state.cart = [];
+            state.coupon = null;
+            document.getElementById('coupon-input').value = '';
+            document.getElementById('coupon-feedback').classList.add('hidden');
+            saveCart();
+            updateCartUI();
+
+            // Display Success Dialog & Party Confetti
+            document.getElementById('success-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            triggerConfetti();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Particle fireworks
+        function triggerConfetti() {
+            const duration = 3.5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 4,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0 },
+                    colors: ['#ff5a1f', '#7c3aed', '#10b981']
+                });
+                confetti({
+                    particleCount: 4,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1 },
+                    colors: ['#ff5a1f', '#7c3aed', '#10b981']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Responsive Mobile Hamburger
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.className = 'fa-solid fa-xmark text-lg';
+            } else {
+                menu.classList.add('hidden');
+                icon.className = 'fa-solid fa-bars text-lg';
+            }
+        }
+
+        // Form Submit Actions
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            e.target.reset();
+            showToast("¡Te has suscrito! Revisa tu bandeja de entrada pronto.", "success");
+        }
+    </script>
+
+</body>
+</html>
